@@ -63,18 +63,18 @@ public:
         auto task = std::unique_ptr<TaskImpl<F, Args...>>(
             new TaskImpl<F, Args...>(myForward<F>(func), myForward<Args>(args)...));
 
-        //Сначала проверка зависимостей
+        // First, check dependencies
         std::unordered_set<TaskId> new_deps;
         task->getDependencies(new_deps);
 
-        //Проверка на существование всех зависимостей
+        // Check if all dependencies exist
         for (auto dep_id : new_deps) {
             if (tasks_.find(dep_id) == tasks_.end()) {
                 throw TaskSchedulerError("Dependency task not found");
             }
         }
 
-        //Проверка на наличие циклов, и + на самозависимости
+        // Check for cycles and self-dependencies
         if (new_deps.count(nextId_) || hasCycleWithNewTask(new_deps)) {
             throw TaskSchedulerError("Cycle detected in task dependencies");
         }
@@ -84,7 +84,7 @@ public:
             tasks_[id] = myMove(task);
             dependency_graph_[id] = new_deps;
         } catch (...) {
-            nextId_--;  //при ошибке - откатываем ID
+            nextId_--;  // Roll back ID on error
             throw;
         }
         return id;
@@ -118,7 +118,7 @@ public:
         std::queue<TaskId> queue;
         std::unordered_map<TaskId, size_t> in_degree;
 
-        //Вычисление степени входа для каждой задачи
+        // Calculate in-degree for each task
         for (const auto& [id, _] : tasks_) {
             in_degree[id] = 0;
         }
@@ -128,14 +128,14 @@ public:
             }
         }
 
-        //Задачи без зависимостей - в очередь 
+        // Add tasks with no dependencies to the queue
         for (const auto& [id, count] : in_degree) {
             if (count == 0) {
                 queue.push(id);
             }
         }
 
-        //Обработка задач в тополог. порядке
+        // Process tasks in topological order
         while (!queue.empty()) {
             TaskId id = queue.front();
             queue.pop();
@@ -144,7 +144,7 @@ public:
                 tasks_[id]->execute();
             }
 
-            //Обновление счетчика зависимостей и добавление новых готовых задач
+            // Update dependency counters and add new ready tasks
             for (TaskId dependent : reverse_dependency_graph_[id]) {
                 if (--in_degree[dependent] == 0) {
                     queue.push(dependent);
@@ -152,7 +152,7 @@ public:
             }
         }
 
-        //Проверка, что все задачи были выполнены (циклы не пропущены)
+        // Check that all tasks were executed (no cycles missed)
         for (const auto& [id, task] : tasks_) {
             if (!task->isExecuted()) {
                 throw TaskSchedulerError("Cycle detected during execution");
@@ -229,7 +229,7 @@ private:
         std::unordered_set<TaskId> visited;
         std::unordered_set<TaskId> recursion_stack;
 
-        //Проверка ток новых зависимостей и их транзитивных зависимостей
+        // Check only new dependencies and their transitive dependencies
         for (TaskId dep_id : new_deps) {
             if (hasCycleDFS(dep_id, visited, recursion_stack)) {
                 return true;

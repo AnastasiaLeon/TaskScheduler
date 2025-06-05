@@ -2,7 +2,7 @@
 #include "scheduler.h"
 #include <string>
 
-//Проверка вычисления квадратного уравнения
+// Test quadratic equation calculation
 TEST(TaskSchedulerTest, QuadraticEquation) {
     TaskScheduler scheduler;
     float a = 1, b = -2, c = 0;
@@ -20,7 +20,7 @@ TEST(TaskSchedulerTest, QuadraticEquation) {
     EXPECT_FLOAT_EQ(scheduler.getResult<float>(id6), 0.0f);
 }
 
-//Проверка работы с методами класса
+// Test handling of class methods
 TEST(TaskSchedulerTest, ClassMethod) {
     struct AddNumber {
         float add(float a) const { return a + number; }
@@ -36,7 +36,7 @@ TEST(TaskSchedulerTest, ClassMethod) {
     EXPECT_FLOAT_EQ(scheduler.getResult<float>(id), 8.0f);
 }
 
-//Проверка работы с неконстантным методом класса
+// Test handling of non-const class methods
 TEST(TaskSchedulerTest, NonConstClassMethod) {
     struct Counter {
         int increment() { return ++count; }
@@ -53,7 +53,7 @@ TEST(TaskSchedulerTest, NonConstClassMethod) {
     EXPECT_EQ(counter.count, 1);
 }
 
-//Проверка ленивого выполнения задач
+// Test lazy execution of tasks
 TEST(TaskSchedulerTest, LazyExecution) {
     TaskScheduler scheduler;
     bool executed = false;
@@ -68,7 +68,7 @@ TEST(TaskSchedulerTest, LazyExecution) {
     EXPECT_TRUE(executed);
 }
 
-//Проверка порядка выполнения зависимых задач
+// Test execution order of dependent tasks
 TEST(TaskSchedulerTest, ExecutionOrder) {
     TaskScheduler scheduler;
     std::vector<int> execution_order;
@@ -87,7 +87,7 @@ TEST(TaskSchedulerTest, ExecutionOrder) {
     EXPECT_EQ(execution_order, (std::vector<int>{1, 2}));
 }
 
-//Проверка повторного использования результатов
+// Test result reuse
 TEST(TaskSchedulerTest, ResultReuse) {
     TaskScheduler scheduler;
     int executionCount = 0;
@@ -105,7 +105,7 @@ TEST(TaskSchedulerTest, ResultReuse) {
     EXPECT_EQ(executionCount, 1);
 }
 
-//Проверка работы с функтором(объектом с оператором вызова)
+// Test handling of functor (object with call operator)
 TEST(TaskSchedulerTest, FunctorSupport) {
     struct Multiplier {
         int operator()(int x, int y) const { return x * y; }
@@ -120,7 +120,7 @@ TEST(TaskSchedulerTest, FunctorSupport) {
     EXPECT_EQ(scheduler.getResult<int>(id), 15);
 }
 
-//Проверка задачи с несколькими зависимостями
+// Test task with multiple dependencies
 TEST(TaskSchedulerTest, MultipleDependencies) {
     TaskScheduler scheduler;
     

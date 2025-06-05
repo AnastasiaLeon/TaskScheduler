@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "scheduler.h"
 
-//Проверка переиспользования планировщика
+// Test scheduler reuse
 TEST(TaskSchedulerTest, ReuseScheduler) {
     TaskScheduler scheduler;
     auto id1 = scheduler.add([] { return 1; });
@@ -13,7 +13,7 @@ TEST(TaskSchedulerTest, ReuseScheduler) {
     EXPECT_EQ(scheduler.getResult<int>(id2), 2);
 }
 
-//Альтернативная проверка переиспользования
+// Alternative test for scheduler reuse
 TEST(TaskSchedulerTest, ReuseScheduler2) {
     TaskScheduler scheduler;
     
@@ -26,7 +26,7 @@ TEST(TaskSchedulerTest, ReuseScheduler2) {
     EXPECT_EQ(scheduler.getResult<int>(id2), 2);
 }
 
-//Проверка повторного выполнения после очистки
+// Test reuse after clearing
 TEST(TaskSchedulerTest, ReuseAfterClear) {
     TaskScheduler scheduler;
     
@@ -41,7 +41,7 @@ TEST(TaskSchedulerTest, ReuseAfterClear) {
     EXPECT_EQ(scheduler.getResult<int>(id3), 3);
 }
 
-//Проверка повторного вызова executeAll
+// Test repeated calls to executeAll
 TEST(TaskSchedulerTest, DoubleExecuteAll) {
     TaskScheduler scheduler;
     auto id = scheduler.add([] { return 1; });

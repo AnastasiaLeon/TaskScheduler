@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 
-//Проверка поддержки разных типов возвращаемых значений
+// Test support for different return types
 TEST(TaskSchedulerTest, MultipleTypes) {
     TaskScheduler scheduler;
     
@@ -16,14 +16,14 @@ TEST(TaskSchedulerTest, MultipleTypes) {
     EXPECT_EQ(scheduler.getResult<std::string>(str_id), "hello!");
 }
 
-//Проверка несоответствия типов
+// Test type mismatch
 TEST(TaskSchedulerTest, TypeMismatch) {
     TaskScheduler scheduler;
     auto id = scheduler.add([] { return 42; });
     EXPECT_THROW(scheduler.getResult<std::string>(id), TaskScheduler::TaskSchedulerError);
 }
 
-//Проверка работы с shared_ptr
+// Test handling of shared_ptr
 TEST(TaskSchedulerTest, SharedPtrType) {
     TaskScheduler scheduler;
     
@@ -34,7 +34,7 @@ TEST(TaskSchedulerTest, SharedPtrType) {
     EXPECT_EQ(scheduler.getResult<int>(id), 6);
 }
 
-//Проверка работы с rvalue ссылками
+// Test handling of rvalue references
 TEST(TaskSchedulerTest, RvalueReference) {
     TaskScheduler scheduler;
     
@@ -46,7 +46,7 @@ TEST(TaskSchedulerTest, RvalueReference) {
     EXPECT_TRUE(base.empty());
 }
 
-//Проверка работы с различными числовыми типами
+// Test handling of various numeric types
 TEST(TaskSchedulerTest, DifferentNumericTypes) {
     TaskScheduler scheduler;
     
@@ -59,7 +59,7 @@ TEST(TaskSchedulerTest, DifferentNumericTypes) {
     EXPECT_DOUBLE_EQ(scheduler.getResult<double>(id2), 1.5);
 }
 
-//Проверка работы с move-only типами
+// Test handling of move-only types with reference
 TEST(TaskSchedulerTest, MoveOnlyTypeWithRef) {
     TaskScheduler scheduler;
     

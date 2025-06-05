@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include "scheduler.h"
-//Эти тесты должны падать:
+// These tests are expected to fail:
 
-//Проверка простого цикла (A->B->A)
+// Test simple cycle detection (A->B->A)
 TEST(TaskSchedulerTest, SimpleCycleDetection) {
     TaskScheduler scheduler;
     
@@ -14,7 +14,7 @@ TEST(TaskSchedulerTest, SimpleCycleDetection) {
     }, TaskScheduler::TaskSchedulerError);
 }
 
-//Проверка транзитивного цикла (A->B->C->A)
+// Test transitive cycle detection (A->B->C->A)
 TEST(TaskSchedulerTest, TransitiveCycleDetection) {
     TaskScheduler scheduler;
     
@@ -27,7 +27,7 @@ TEST(TaskSchedulerTest, TransitiveCycleDetection) {
     }, TaskScheduler::TaskSchedulerError);
 }
 
-//Проверка глубоко вложенного цикла
+// Test deeply nested cycle detection
 TEST(TaskSchedulerTest, DeepNestedCycle) {
     TaskScheduler scheduler;
     

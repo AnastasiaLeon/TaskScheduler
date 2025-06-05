@@ -1,21 +1,21 @@
 #include <gtest/gtest.h>
 #include "scheduler.h"
 
-//Проверка максимального количества аргументов(2)
+// Test maximum number of arguments (2)
 TEST(TaskSchedulerTest, TwoArguments) {
     TaskScheduler scheduler;
     auto id = scheduler.add([](int a, float b) { return a + b; }, 1, 2.5f);
     EXPECT_FLOAT_EQ(scheduler.getResult<float>(id), 3.5f);
 }
 
-//Проверка задачи с одним аргументом
+// Test task with one argument
 TEST(TaskSchedulerTest, OneArgument) {
     TaskScheduler scheduler;
     auto id = scheduler.add([](int a) { return a * 2; }, 5);
     EXPECT_EQ(scheduler.getResult<int>(id), 10);
 }
 
-//Проверка задачи без аргументов
+// Test task with no arguments
 TEST(TaskSchedulerTest, ZeroArguments) {
     TaskScheduler scheduler;
     auto id = scheduler.add([] { return 42; });
@@ -23,7 +23,7 @@ TEST(TaskSchedulerTest, ZeroArguments) {
     EXPECT_EQ(scheduler.getResult<int>(id), 42);
 }
 
-//Проверка работы с константными аргументами
+// Test handling of constant arguments
 TEST(TaskSchedulerTest, ConstArguments) {
     TaskScheduler scheduler;
     
@@ -34,7 +34,7 @@ TEST(TaskSchedulerTest, ConstArguments) {
     EXPECT_EQ(scheduler.getResult<int>(id), 10);
 }
 
-//Проверка передачи аргумента по ссылке
+// Test passing argument by reference
 TEST(TaskSchedulerTest, ReferenceArgument) {
     TaskScheduler scheduler;
     int value = 10;
